@@ -118,11 +118,7 @@ public class TestPhoneLookup extends AppiumController {
     @Attachment(value = "{attachmentName}", type = "image/png")
     public byte[] getScreenshot(String attachmentName) throws Exception {
         // make screenshot and get is as base64
-        if (platform.equals(OperatingSystem.ANDROID)) {
-            return driver.getScreenshotAs(OutputType.BYTES);
-        }
-
-        return null;
+        return driver.getScreenshotAs(OutputType.BYTES);
     }
 
     private static void buildDeviceList(List<Object[]> list, String deviceList, String bundleId,
