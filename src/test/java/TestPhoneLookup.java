@@ -7,6 +7,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.OutputType;
 import screens.LoginScreen;
+import screens.SearchResultsScreen;
 import screens.SearchScreen;
 
 import java.io.File;
@@ -36,6 +37,7 @@ public class TestPhoneLookup extends AppiumController {
 
     protected LoginScreen loginScreen;
     protected SearchScreen searchScreen;
+    protected SearchResultsScreen searchResultsScreen;
 
     public TestPhoneLookup(String udid, String platformName,
                            String bundleID, String automationName) {
@@ -68,8 +70,9 @@ public class TestPhoneLookup extends AppiumController {
     public void setUp() throws Exception {
         startAppium();
 
-        loginScreen = new LoginScreen(driver);
-        searchScreen = new SearchScreen(driver);
+        loginScreen = new LoginScreen(driver, wait);
+        searchScreen = new SearchScreen(driver, wait);
+        searchResultsScreen = new SearchResultsScreen(driver, wait);
     }
 
     @After
@@ -78,34 +81,15 @@ public class TestPhoneLookup extends AppiumController {
     }
 
     @Test
-    @DisplayName("Verify Login")
-    @Feature("Login")
-    @Story("Valid Login")
-    @Description("Verifies that the Search Button appears on the Search Screen after entering the username and password and then clicking the Sign In button on the login screen")
-    public void loginTest() throws Exception {
-        try {
-            getScreenshot("Launch Screen");
-            loginScreen.login("mobilelabs", "demo");
-            Assert.assertTrue(searchScreen.isSearchButtonPresent());
-            getScreenshot("Search Screen");
-        } catch (Exception ex) {
-
-            //Get screenshot if test fails
-            getScreenshot("Failed - Exception");
-            throw ex;
-        }
-    }
-
-    @Test
     @DisplayName("Verify Search")
     @Feature("Search")
-    @Story("Valid Searc")
+    @Story("Valid Search")
     @Description("Verifies that the list of items is returned after filling out the search form")
     public void searchTest() throws Exception {
         try {
-            getScreenshot("Launch Screen");
             loginScreen.login("mobilelabs", "demo");
             searchScreen.fillSearchForm("Droid Charge", "Samsung", true, true, false, false, "In Stock");
+            Assert.assertTrue(searchResultsScreen.isSearchResultListPresent());
             getScreenshot("Search Results");
         } catch (Exception ex) {
 
